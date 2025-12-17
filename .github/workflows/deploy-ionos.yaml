@@ -12,21 +12,28 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Run HTML Validator
-        # This is a robust standard validator
-        uses: anishathalye/html5validator-action@v1
+      # STEP A: Install Python (The programming language)
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          root: . # Check files in the main folder
-          
+          python-version: '3.9'
+
+      # STEP B: Install the Validator Tool manually
+      - name: Install HTML Validator
+        run: pip install html5validator
+
+      # STEP C: Run the Tool
+      - name: Run HTML Validator
+        run: html5validator --root . --ignore-re '.*node_modules.*'
+
   # JOB 2: THE DELIVERY (Only runs if Job 1 passes)
   deploy:
-    needs: [check-code]  # <--- CRITICAL: Wait for 'check-code' to finish!
+    needs: [check-code]
     runs-on: ubuntu-latest
     steps:
       - name: Get latest code
         uses: actions/checkout@v3
       
-      # Clean up hidden files again
       - name: Remove .git and .github folders
         run: rm -rf .git .github
 
