@@ -19,5 +19,5 @@ jobs:
         password: ${{ secrets.SFTP_PASSWORD }}
         port: 22 
         local_path: './'   # Take files from here
-        remote_path: '/'   # Put them in the main folder on IONOS
+        remote_path: '/public'   # Put them in the main folder on IONOS
         sftp_only: true
