@@ -12,10 +12,12 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Run HTML Linter
-        # This action checks HTML files for syntax errors
-        uses: 10up/action-html-validate@v0.0.3
-
+      - name: Run HTML Validator
+        # This is a robust standard validator
+        uses: anishathalye/html5validator-action@v1
+        with:
+          root: . # Check files in the main folder
+          
   # JOB 2: THE DELIVERY (Only runs if Job 1 passes)
   deploy:
     needs: [check-code]  # <--- CRITICAL: Wait for 'check-code' to finish!
