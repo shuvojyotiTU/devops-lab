@@ -11,6 +11,10 @@ jobs:
     - name: Get latest code
       uses: actions/checkout@v3
 
+    # --- NEW STEP: Delete hidden .git files so they don't get uploaded ---
+    - name: Remove .git and .github folders
+      run: rm -rf .git .github
+
     - name: SFTP Deploy
       uses: wlixcc/SFTP-Deploy-Action@v1.2.4
       with:
@@ -18,6 +22,9 @@ jobs:
         server: ${{ secrets.SFTP_SERVER }}
         password: ${{ secrets.SFTP_PASSWORD }}
         port: 22 
-        local_path: './'   # Take files from here
-        remote_path: '/public'   # Put them in the main folder on IONOS
+        local_path: './'
+        # IMPORTANT: Are you SURE the folder is named 'public'? 
+        # On IONOS it is usually 'public_html' or just '/'
+        # Check your FileZilla or IONOS dashboard to be sure.
+        remote_path: '/public' 
         sftp_only: true
