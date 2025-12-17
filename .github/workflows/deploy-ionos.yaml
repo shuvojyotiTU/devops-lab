@@ -5,26 +5,36 @@ on:
     branches: [ "main" ]
 
 jobs:
-  deploy:
+  # JOB 1: THE BOUNCER (Check the code)
+  check-code:
     runs-on: ubuntu-latest
     steps:
-    - name: Get latest code
-      uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-    # --- NEW STEP: Delete hidden .git files so they don't get uploaded ---
-    - name: Remove .git and .github folders
-      run: rm -rf .git .github
+      - name: Run HTML Linter
+        # This action checks HTML files for syntax errors
+        uses: 10up/action-html-validate@v0.0.3
 
-    - name: SFTP Deploy
-      uses: wlixcc/SFTP-Deploy-Action@v1.2.4
-      with:
-        username: ${{ secrets.SFTP_USERNAME }}
-        server: ${{ secrets.SFTP_SERVER }}
-        password: ${{ secrets.SFTP_PASSWORD }}
-        port: 22 
-        local_path: './'
-        # IMPORTANT: Are you SURE the folder is named 'public'? 
-        # On IONOS it is usually 'public_html' or just '/'
-        # Check your FileZilla or IONOS dashboard to be sure.
-        remote_path: '/public' 
-        sftp_only: true
+  # JOB 2: THE DELIVERY (Only runs if Job 1 passes)
+  deploy:
+    needs: [check-code]  # <--- CRITICAL: Wait for 'check-code' to finish!
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get latest code
+        uses: actions/checkout@v3
+      
+      # Clean up hidden files again
+      - name: Remove .git and .github folders
+        run: rm -rf .git .github
+
+      - name: SFTP Deploy
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          username: ${{ secrets.SFTP_USERNAME }}
+          server: ${{ secrets.SFTP_SERVER }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          port: 22 
+          local_path: './'
+          remote_path: '/public_html'
+          sftp_only: true
