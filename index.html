@@ -3,139 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevOps Deployment Status</title>
+    <title>E.ON DevOps Node</title>
     <style>
-        /* --- CSS STYLES --- */
         :root {
-            /* Color Palette */
-            --bg-dark: #0f172a;
-            --text-light: #e2e8f0;
-            --text-dim: #94a3b8;
-            --accent-primary: #06b6d4;  /* Cyan */
-            --accent-secondary: #a855f7; /* Purple */
+            --bg-color: #0b0f19;
+            --primary: #00f3ff;
+            --text: #ffffff;
         }
-
-        /* Reset and Base Styles */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            background-color: var(--bg-color);
+            font-family: 'Courier New', Courier, monospace;
+            color: var(--text);
             display: flex;
-            align-items: center;
             justify-content: center;
-            /* Subtle background glowing lights */
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.15) 0%, transparent 40%);
-            padding: 20px;
+            align-items: center;
+            height: 100vh;
         }
-
-        /* Main Container */
-        .hero-container {
-            max-width: 800px;
-            text-align: center;
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
         }
-
-        /* Status Badge */
-        .badge {
-            display: inline-block;
-            padding: 6px 12px;
-            margin-bottom: 24px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: var(--accent-primary);
-            background: rgba(6, 182, 212, 0.1);
-            border: 1px solid rgba(6, 182, 212, 0.3);
-            border-radius: 9999px;
-            box-shadow: 0 0 15px -3px rgba(6, 182, 212, 0.3);
-        }
-
-        /* Main Title with Gradient Effect */
-        .hero-title {
-            font-size: clamp(2.5rem, 5vw, 4.5rem); /* Responsive font size */
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 24px;
-            letter-spacing: -0.02em;
-        }
-        
-        .gradient-text {
-            background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            color: transparent;
-        }
-
-        /* Subtitle */
-        .hero-subtitle {
-            font-size: 1.25rem;
-            color: var(--text-dim);
-            max-width: 600px;
-            margin: 0 auto 40px auto;
-            line-height: 1.6;
-        }
-
-        /* Call to Action Button */
-        .btn-glow {
-            display: inline-block;
-            text-decoration: none;
-            padding: 16px 32px;
-            font-size: 1.125rem;
-            font-weight: 700;
-            color: var(--bg-dark);
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            border-radius: 8px;
-            transition: all 0.3s ease;
+        .container {
             position: relative;
             z-index: 1;
-        }
-
-        /* Button Hover Effects */
-        .btn-glow::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            z-index: -1;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            text-align: center;
+            background: rgba(11, 15, 25, 0.85);
+            padding: 3rem;
+            border: 1px solid var(--primary);
             border-radius: 8px;
-            filter: blur(15px);
-            opacity: 0.5;
-            transition: opacity 0.3s ease;
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.2);
+            backdrop-filter: blur(5px);
         }
-        .btn-glow:hover {
-             transform: translateY(-3px);
-             box-shadow: 0 10px 20px -10px rgba(168, 85, 247, 0.5);
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 0 10px var(--primary);
         }
-        .btn-glow:hover::before {
-            opacity: 0.8;
+        .status {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+        }
+        .status::before {
+            content: '●';
+            margin-right: 10px;
+            animation: blink 1.5s infinite;
+        }
+        .btn {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 15px 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        .btn:hover {
+            background: var(--primary);
+            color: var(--bg-color);
+            box-shadow: 0 0 20px var(--primary);
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
         }
     </style>
 </head>
 <body>
 
-    <main class="hero-container">
-        <div class="badge">
-            ● Pipeline Successful
-        </div>
-        
-        <h1 class="hero-title">
-            Hello, World. <br>
-            The <span class="gradient-text">CI/CD Pipeline</span> is Live.
-        </h1>
-        
-        <p class="hero-subtitle">
-            This page was deployed automatically from GitHub directly to IONOS hosting. 
-            The robot successfully delivered the code.
-        </p>
-        
-        <a href="#" class="btn-glow">
-            Acknowledge Success
-        </a>
-    </main>
+    <canvas id="canvas"></canvas>
 
+    <div class="container">
+        <h1>System Online</h1>
+        <div class="status">CI/CD Pipeline :: ACTIVE</div>
+        <p>Managed by GitHub Actions & IONOS SFTP</p>
+        <br>
+        <button class="btn" onclick="alert('System Integrity Verified: 100%')">Run Diagnostics</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+        
+        // Handle Mouse Interaction
+        const mouse = { x: null, y: null, radius: 150 };
+        window.addEventListener('mousemove', (event) => {
+            mouse.x = event.x;
+            mouse.y = event.y;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 1.5 - 0.75;
+                this.speedY = Math.random() * 1.5 - 0.75;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // Bounce off edges
+                if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+                if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+
+                // Mouse attraction
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx*dx + dy*dy);
+                if (distance < mouse.radius) {
+                    this.x -= dx/20;
+                    this.y -= dy/20;
+                }
+            }
+            draw() {
+                ctx.fillStyle = '#00f3ff';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            for (let i = 0; i < 100; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                
+                // Draw connections
+                for (let j = i; j < particles.length; j++) {
+                    let dx = particles[i].x - particles[j].x;
+                    let dy = particles[i].y - particles[j].y;
+                    let distance = Math.sqrt(dx*dx + dy*dy);
+                    if (distance < 100) {
+                        ctx.strokeStyle = `rgba(0, 243, 255, ${1 - distance/100})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        init();
+        animate();
+        
+        // Resize fix
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
 </body>
+</html>
