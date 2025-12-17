@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Deployment Status</title>
+    <style>
+        /* --- CSS STYLES --- */
+        :root {
+            /* Color Palette */
+            --bg-dark: #0f172a;
+            --text-light: #e2e8f0;
+            --text-dim: #94a3b8;
+            --accent-primary: #06b6d4;  /* Cyan */
+            --accent-secondary: #a855f7; /* Purple */
+        }
+
+        /* Reset and Base Styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Subtle background glowing lights */
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.15) 0%, transparent 40%);
+            padding: 20px;
+        }
+
+        /* Main Container */
+        .hero-container {
+            max-width: 800px;
+            text-align: center;
+        }
+
+        /* Status Badge */
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 24px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--accent-primary);
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 9999px;
+            box-shadow: 0 0 15px -3px rgba(6, 182, 212, 0.3);
+        }
+
+        /* Main Title with Gradient Effect */
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4.5rem); /* Responsive font size */
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Subtitle */
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto 40px auto;
+            line-height: 1.6;
+        }
+
+        /* Call to Action Button */
+        .btn-glow {
+            display: inline-block;
+            text-decoration: none;
+            padding: 16px 32px;
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--bg-dark);
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Button Hover Effects */
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -1;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 8px;
+            filter: blur(15px);
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+        .btn-glow:hover {
+             transform: translateY(-3px);
+             box-shadow: 0 10px 20px -10px rgba(168, 85, 247, 0.5);
+        }
+        .btn-glow:hover::before {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+
+    <main class="hero-container">
+        <div class="badge">
+            ● Pipeline Successful
+        </div>
+        
+        <h1 class="hero-title">
+            Hello, World. <br>
+            The <span class="gradient-text">CI/CD Pipeline</span> is Live.
+        </h1>
+        
+        <p class="hero-subtitle">
+            This page was deployed automatically from GitHub directly to IONOS hosting. 
+            The robot successfully delivered the code.
+        </p>
+        
+        <a href="#" class="btn-glow">
+            Acknowledge Success
+        </a>
+    </main>
+
+</body>

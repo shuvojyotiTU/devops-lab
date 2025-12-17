@@ -1,0 +1,29 @@
+name: Deploy to IONOS
+
+# Trigger: Run this whenever I push to the 'main' branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  web-deploy:
+    name: Deploy to Hosting
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Get the latest code from your repo
+      - name: Get latest code
+        uses: actions/checkout@v3
+
+      # Step 2: Use the keys to upload files via SFTP
+      - name: Sync files to IONOS
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.SFTP_SERVER }}
+          username: ${{ secrets.SFTP_USERNAME }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          protocol: sftp
+          port: 22
+          # This '/' puts files in the main folder of your hosting.
+          # If IONOS organizes folders differently, we might adjust this later.
+          server-dir: /
