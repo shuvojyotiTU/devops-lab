@@ -2,7 +2,7 @@ import requests
 import sys
 
 
-url = "http://time-net.online"
+url = "http://time-net.online.extra"
 
 print(f"🕵️  SRE Watchdog is checking: {url} ...")
 
